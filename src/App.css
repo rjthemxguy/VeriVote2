@@ -33,6 +33,27 @@
 }
 
 
+.radioSpace{
+width: 100%;
+height: 15px;
+}
+
+.radioControl {
+  margin-top: 20px;
+  font-size: 34px;
+  
+
+}
+
+.activeClass {
+  font-weight: bold;
+  color: green;
+}
+
+.notActiveClass {
+  font-weight: bold;
+  color: red;
+}
 
 .navy {
   color:navy;

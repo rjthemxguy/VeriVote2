@@ -51,7 +51,7 @@ const authLinks = (
 
         
         <li onClick={showSidebar}><BsIcons.BsFillCheckCircleFill className="iconItem"/>
-            <Link style={{textDecoration:'none'}} className="text-light" to='/users'>Approve Users</Link></li>
+            <Link style={{textDecoration:'none'}} className="text-light" to='/listUsers'>Approve Users</Link></li>
         <li onClick={onLogout}><BiIcons.BiLogOutCircle className="iconItem"/>Logout</li>
 
 </Fragment>

@@ -12,16 +12,20 @@ import {REGISTER_SUCCESS,
         LOGIN_FAIL,
         LOGOUT,
         CLEAR_ERRORS} from '../../types';
+import { BsNutFill } from 'react-icons/bs';
 
 const AuthState = (props) => {
+
+
+
     const initialState = {
         token: localStorage.getItem('token'),
         isAuthenticated: null,
-        isLoading: true,
+        loading: true,
         error: null,
-        user: null,
+        user: {name:"RJ"},
         isActive: false,
-        county: "SB",
+        searchCounty: "SB",
         isAdmin: false
 
     }
@@ -144,7 +148,7 @@ const clearErrors = () => {dispatch({type:CLEAR_ERRORS})}
             error: state.error,
             user: state.user,
             isActive: state.isActive,
-            county: state.county,
+            searchCounty: state.searchCounty,
             register,
             clearErrors,
             loadUser,

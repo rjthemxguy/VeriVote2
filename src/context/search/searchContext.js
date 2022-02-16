@@ -12,7 +12,8 @@ const [data, setSearchState] = useState({fName:"",
                                           lName:"",
                                           houseNum:"",
                                           street:"",
-                                          city:""});
+                                          city:"",
+                                          searchCounty:"SB"});
  
  
    return(

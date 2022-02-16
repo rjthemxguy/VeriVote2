@@ -10,6 +10,7 @@ import { AppContext, AppState } from '../../context/app/appContext';
 
 
 
+
 function Search() {
 
     let navigate = useNavigate();
@@ -19,16 +20,20 @@ function Search() {
     const {appState, setAppState} = appContext;
     const {currentUser} = appState;
    
-    const {user, loading} = authContext;
+    const {user,loading, error, state} = authContext;
+
+    
+    
 
     useEffect(() => {
       authContext.loadUser();
+      
           
      
 
-    },[]);
+    },[authContext.isAuthenticated]);
 
-
+   
    
 
     const notify = () => toast.error("Please enter some data!", {position: "top-center"});
@@ -37,7 +42,7 @@ function Search() {
 
     const {data, setSearchState} = searchContext;
      
-    const {fName, lName, houseNum, street, city} = data;
+    const {fName, lName, houseNum, street, city, searchCounty} = data;
 
     
   
@@ -68,7 +73,7 @@ function Search() {
     return isBlank;
    }
 
-    const onChange = e => setSearchState({...data, [e.target.name]: e.target.value});
+    const onChange = e => setSearchState({...data, county:user.county, [e.target.name]: e.target.value});
 
     const onSubmit = (e) =>{
         e.preventDefault();
@@ -93,8 +98,12 @@ function Search() {
    
   return (
     <Fragment>
+
         
      <div className="form-group container pt-4 topMargin" >
+
+    Search County: {searchCounty}
+
         <form onSubmit={onSubmit}>
             <input type="text"
             class="form-control mt-4"

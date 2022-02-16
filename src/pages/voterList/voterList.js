@@ -42,7 +42,8 @@ const VoterList = () => {
     }, []);
 
     function newSearch(){
-      setSearchState({fName:"",
+      setSearchState({...data,
+      fName:"",
       lName:"",
       houseNum:"",
       street:"",

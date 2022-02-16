@@ -36,7 +36,7 @@ import {REGISTER_SUCCESS,
         case AUTH_ERROR:
         case LOGIN_FAIL:
         case LOGOUT:
-            console.log(action.payload);
+            console.log("LOGOUT");
             localStorage.removeItem('token');
 
             return {

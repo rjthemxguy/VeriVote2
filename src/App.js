@@ -13,7 +13,10 @@ import PrivateRoute from './components/privateRoute';
 import VoterState from './context/voter/VoterState';
 import NotActive from './pages/notActive/notActive';
 import VoterList from './pages/voterList/voterList';
-
+import UserState from './context/user/UserState';
+import UserDetail from './pages/userDetail/UserDetail';
+import ListUsers from './pages/listUsers/ListUsers';
+import CountyList from './pages/listCounties/ListCounties';
 
 if(localStorage.token) {
   setAuthToken(localStorage.token);
@@ -27,6 +30,7 @@ function App() {
       <div>
       <AuthState>
         <AppState>
+          <UserState>
           <VoterState>
           <SearchState>
             <BrowserRouter>
@@ -39,10 +43,14 @@ function App() {
                   <Route path="/login" element={<Login />}/>
                   <Route path="/results" element={<VoterList />}/>
                   <Route path="/notActive" element={<NotActive />}/>
+                  <Route path="/userDetail" element={<UserDetail />}/>
+                  <Route path="/listUsers" element={<ListUsers />}/>
+                  <Route path="/countyList" element={<CountyList />}/>
                 </Routes>
             </BrowserRouter>
            </SearchState>
            </VoterState>
+           </UserState>
           </AppState>
       </AuthState>
       </div>   
