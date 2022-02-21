@@ -31,25 +31,43 @@ function App() {
       <AuthState>
         <AppState>
           <UserState>
+         <SearchState>   
           <VoterState>
-          <SearchState>
+          
             <BrowserRouter>
               <Navbar/>
                 <Routes>
-                  <Route path='/' element={<PrivateRoute/>}>  
-                    <Route path="/" element={<Search />}/>
-                  </Route>
+
+                      <Route path='/' element={<PrivateRoute/>}>  
+                        <Route path="/" element={<Search />}/>
+                      </Route>
+
                   <Route path="/register" element={<Register />}/>
                   <Route path="/login" element={<Login />}/>
-                  <Route path="/results" element={<VoterList />}/>
+
+                      <Route path='/' element={<PrivateRoute/>}> 
+                          <Route path="/results" element={<VoterList />}/>
+                      </Route>
+
+                      <Route path='/' element={<PrivateRoute/>}>
                   <Route path="/notActive" element={<NotActive />}/>
-                  <Route path="/userDetail" element={<UserDetail />}/>
-                  <Route path="/listUsers" element={<ListUsers />}/>
-                  <Route path="/countyList" element={<CountyList />}/>
+                        </Route>
+
+                      <Route path='/' element={<PrivateRoute/>}>
+                         <Route path="/userDetail" element={<UserDetail />}/>
+                      </Route>
+                      <Route path='/' element={<PrivateRoute/>}>
+                          <Route path="/listUsers" element={<ListUsers />}/>
+                      </Route>
+
+                      <Route path='/' element={<PrivateRoute/>}>
+                          <Route path="/countyList" element={<CountyList />}/>
+                      </Route>
                 </Routes>
             </BrowserRouter>
-           </SearchState>
+         
            </VoterState>
+           </SearchState>
            </UserState>
           </AppState>
       </AuthState>

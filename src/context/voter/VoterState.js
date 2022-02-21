@@ -2,6 +2,7 @@ import React, {useReducer, useContext} from 'react';
 import VoterContext from './voterContext';
 import voterReducer from './voterReducer';
 import AppState, { AppContext } from '../../context/app/appContext';
+import SearchContext from '../search/searchContext';
 
 import { GET_VOTERS, VOTER_ERROR } from '../../types';
 import axios from 'axios';
@@ -9,9 +10,7 @@ import axios from 'axios';
 const VoterState = props =>{
 
 
-    
-
-    
+        
 
     const initialState = {
 
@@ -32,15 +31,38 @@ const VoterState = props =>{
 
     const getVoters = async (props) => {
 
-
+        
         const data = props;
 
-      
-        const query = `http://139.59.170.27:5000/api/voters?last=${Capitalize(data.lName)}&first=${Capitalize(data.fName)}&house=${data.houseNum}&street=${Capitalize(data.street)}&city=${Capitalize(data.city)}`;
+        if(data.searchCounty == "SB") {
+           
+        }
+
+        let lName = data.lName.toUpperCase();
+        let fName = data.fName.toUpperCase();
+        let street = data.street.toUpperCase();
+        let city = data.city.toUpperCase();
         
+        let queryArray = {
+            1:`http://137.184.185.127:5000/api/voters?last=${(lName)}&first=${(fName)}&house=${data.houseNum}&street=${(street)}&city=${(city)}`,
+            2:`http://139.59.170.27:5000/api/voters?last=${Capitalize(data.lName)}&first=${Capitalize(data.fName)}&house=${data.houseNum}&street=${Capitalize(data.street)}&city=${Capitalize(data.city)}`
+        }
+
+        let indexCounty = 1;
+
+        if(data.searchCounty == "RIV") {
+            indexCounty = 2;
+        }
+
+        if(data.searchCounty == "SB") {
+            indexCounty = 1;
+        }
+
+
+         
         
-        
-        
+        const query = queryArray[indexCounty];
+       
        
         try {
             setAppState({loading:true});
@@ -57,6 +79,7 @@ const VoterState = props =>{
                 });
 
         } catch (err) {
+           
             dispatch({
                 type:VOTER_ERROR,
                 payload: err.response.msg

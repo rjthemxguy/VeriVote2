@@ -27,6 +27,7 @@ const VoterList = () => {
     const searchContext = useContext(SearchContext);
 
     const {data, setSearchState} = searchContext;
+    const {searchCounty} = data;
 
     const  voterContext = useContext(VoterContext);
 
@@ -56,29 +57,66 @@ const VoterList = () => {
     
    
 const actionButton = (voter) => {
-  setSearchState({fName:"",
+
+
+  if(searchCounty == "RIV") {
+
+  setSearchState({...data,fName:"",
   lName:"",
   city:"",
   houseNum:voter.sHouseNum,
   street:voter.szStreetName});
-  
+  };
+
+  if(searchCounty == "SB") {
+
+    setSearchState({...data,fName:"",
+    lName:"",
+    city:"",
+    houseNum:voter.house_number,
+    street:voter.street});
+    };
+
+
+
+
 navigate("/");
   
 }
 
+let ListTag = "";
 
 
-const ListTag = () => voters.map(voter => (<div className="fullRow"><div className="leftRow text-start">
+
+
+
+let loadingMesssage = "";
+
+if(searchCounty == "RIV") {
+loadingMesssage = "Loading Voters for RIV County"
+
+ListTag = () => voters.map(voter => (<div className="fullRow"><div className="leftRow text-start">
   <span className="navy">{voter.szNameLast} , {voter.szNameFirst}</span>
-<br/><span className="row2 text-start">{voter.sHouseNum} {voter.szStreetName}, {voter.szSitusCity} 
+<br/><span className="row2 text-start">{voter.sHouseNum} {voter.szStreetName} {voter.sUnitAbbr} {voter.sUnitNum},  {voter.szSitusCity} 
 </span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack" onClick={() => actionButton(voter)}/></div>
 </div>
 ))
+}
 
+if(searchCounty == "SB") {
+  loadingMesssage = "Loading Voters for SB County"
+
+ ListTag = () => voters.map(voter => (<div className="fullRow"><div className="leftRow text-start">
+  <span className="navy">{voter.name_last} , {voter.name_first}</span>
+<br/><span className="row2 text-start">{voter.house_number} {voter.street}, {voter.city} 
+</span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack" onClick={() => actionButton(voter)}/></div>
+</div>
+))
+  }
 
 if(loading) {
 return(
-  <h1 className="midPageMargin">Loading Voters......</h1>
+  <h1 className="midPageMargin">{loadingMesssage}</h1>
 )
 
 }
@@ -91,13 +129,13 @@ else {
 
     return (
       <Fragment >
-
+        
         <div className="text-center">
           <div className="fixed-top mt-4 newSearch" onClick={newSearch}>Click Here for NEW SEARCH</div>
         </div>
 
         <div className="midPageMargin"></div>  
-  
+     
         <h1>No Results.  Please Search Again.</h1>
   
       </Fragment>
@@ -115,7 +153,7 @@ else {
             </div>
 
             <div className="topMargin"></div>  
-      
+            
             <ListTag />
       
           </Fragment>

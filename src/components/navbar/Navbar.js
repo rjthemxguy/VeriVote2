@@ -34,7 +34,7 @@ const onLogout = () => {
 
 
 const guestLinks = (
-    <Fragment>N
+    <Fragment>
          <li onClick={showSidebar}><FaIcons.FaPencilAlt className="iconItem"/>
          <Link style={{textDecoration:'none'}} className="text-light" to='/register'>Register</Link></li>
          <li onClick={showSidebar}><BiIcons.BiLogInCircle className="iconItem"/>

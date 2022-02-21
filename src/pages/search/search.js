@@ -73,7 +73,7 @@ function Search() {
     return isBlank;
    }
 
-    const onChange = e => setSearchState({...data, county:user.county, [e.target.name]: e.target.value});
+    const onChange = e => setSearchState({...data, county:searchCounty, [e.target.name]: e.target.value});
 
     const onSubmit = (e) =>{
         e.preventDefault();
