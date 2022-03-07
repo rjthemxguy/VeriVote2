@@ -72,16 +72,32 @@ height: 15px;
   background-color:lavender;
 }
 
+.gop {
+  color:red;
+}
 
+.party {
+  color: rgb(182, 10, 130);
+}
 
 .newSearch{
+  height: 5px;
+  font-size: 46px;
+  color: white;
+  width: 130px;
+ margin-top: -15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.mapVoters{
   height: 25px;
   background-color:crimson;
   color: white;
-  width: 230px;
+  width: 100px;
   border-radius: 10px;
-  margin-right: auto;
-  margin-left: auto;
+  margin-left: 10%;
+  
 }
 
 

@@ -56,6 +56,8 @@ const UserState = props =>{
 
     const updateUser = async (currentUser) => {
 
+    console.log("Upadate: " + currentUser.seeParty)
+
         const config = {
             headers: {
                 'Content-Type':'application/json'

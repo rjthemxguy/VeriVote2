@@ -28,7 +28,7 @@ const passwordLentgh = () => toast.error("Please enter a password with 6 or more
 
 const {register, error, clearErrors, isAuthenticated} = authContext;
 
-const {name, email, password, password2, isActive} = user;
+const {name, email, password, password2, isActive, seeParty} = user;
 
 useEffect(() => {
 

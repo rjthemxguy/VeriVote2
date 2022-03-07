@@ -81,8 +81,21 @@ const CountyList = () => {
     checked={county === "RIV"}
     onChange={onValueChange}/> Riverside
     <div className="radioSpace"/>
-    <button className="btn-primary btn" onClick={() =>{submitCounty()}}>Save</button>
+    
 
+    
+
+    <input
+    className="radioControl"
+    type="radio"
+    value="FRESNO"
+    name="county"
+    checked={county === "FRESNO"}
+    onChange={onValueChange}/> Fresno
+
+<div className="radioSpace"></div>
+
+<button className="btn-primary btn" onClick={() =>{submitCounty()}}>Save</button>
   </Fragment>
 
   )

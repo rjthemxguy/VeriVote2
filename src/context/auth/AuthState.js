@@ -26,7 +26,8 @@ const AuthState = (props) => {
         user: {name:"RJ"},
         isActive: false,
         searchCounty: "SB",
-        isAdmin: false
+        isAdmin: false,
+        seeParty: false
 
     }
 
@@ -72,6 +73,7 @@ const register = async formData => {
     formData.isActive = state.isActive;
     formData.county = state.county;
     formData.isAdmin = state.isAdmin;
+    formData.seeParty = state.seeParty;
 
     const config ={
         headers:{
@@ -148,6 +150,7 @@ const clearErrors = () => {dispatch({type:CLEAR_ERRORS})}
             error: state.error,
             user: state.user,
             isActive: state.isActive,
+            seeParty: state.seeParty,
             searchCounty: state.searchCounty,
             register,
             clearErrors,

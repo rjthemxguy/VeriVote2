@@ -17,6 +17,7 @@ import UserState from './context/user/UserState';
 import UserDetail from './pages/userDetail/UserDetail';
 import ListUsers from './pages/listUsers/ListUsers';
 import CountyList from './pages/listCounties/ListCounties';
+import MapVoters from './pages/mapVoters/MapVoters';
 
 if(localStorage.token) {
   setAuthToken(localStorage.token);
@@ -51,6 +52,10 @@ function App() {
 
                       <Route path='/' element={<PrivateRoute/>}>
                   <Route path="/notActive" element={<NotActive />}/>
+                        </Route>
+
+                        <Route path='/' element={<PrivateRoute/>}>
+                  <Route path="/mapVoters" element={<MapVoters />}/>
                         </Route>
 
                       <Route path='/' element={<PrivateRoute/>}>
