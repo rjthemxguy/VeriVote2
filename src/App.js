@@ -18,6 +18,9 @@ import UserDetail from './pages/userDetail/UserDetail';
 import ListUsers from './pages/listUsers/ListUsers';
 import CountyList from './pages/listCounties/ListCounties';
 import MapVoters from './pages/mapVoters/MapVoters';
+import { Provider } from 'react-redux';
+import store from '../src/store';
+
 
 if(localStorage.token) {
   setAuthToken(localStorage.token);
@@ -29,6 +32,7 @@ function App() {
   return (
     <div className="App">
       <div>
+        <Provider store = {store}>
       <AuthState>
         <AppState>
           <UserState>
@@ -76,6 +80,7 @@ function App() {
            </UserState>
           </AppState>
       </AuthState>
+      </Provider>
       </div>   
     </div>
   );
