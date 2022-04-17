@@ -2,7 +2,7 @@ import { GET_VOTERS, SET_LOADING, VOTER_ERROR } from "../types";
 
 
 const initialState = {
-    voters: null,
+    voters: "",
     loading:false,
     error: null
 }

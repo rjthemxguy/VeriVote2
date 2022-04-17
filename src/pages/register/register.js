@@ -1,18 +1,19 @@
-import React, {useState, useContext, useEffect} from 'react';
-import AuthContext from '../../context/auth/authContext';
+import React, {useState, useEffect} from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {useSelector, useDispatch} from 'react-redux';
+import {register, reset} from '../../features/auth/authSlice';
+import { loadUser } from '../../features/auth/authSlice';
+
 
 
 const Register = () => {
 
 let navigate = useNavigate();
 
-const authContext = useContext(AuthContext);
 
-
-const [user, setUser] = useState({
+const [formData, setForm] = useState({
     name: "",
     email: "",
     password: "",
@@ -20,32 +21,41 @@ const [user, setUser] = useState({
 
 });
 
+
+
+
 const emptyFields = () => toast.error("Please complete all fields!", {position: "top-center"});
 const passwordError = () => toast.error("Passwords do not match!", {position: "top-center"});
 const userExists = () => toast.error("User already exists!", {position: "top-center"});
 const passwordLentgh = () => toast.error("Please enter a password with 6 or more characters!", {position: "top-center"});
 
 
-const {register, error, clearErrors, isAuthenticated} = authContext;
-
-const {name, email, password, password2, isActive, seeParty} = user;
-
-useEffect(() => {
-
-if (isAuthenticated) {
-    navigate("/");
-}
-
-if (error ==="User already exists") {
-userExists();
-}
 
 
-clearErrors();
+const {user, isLoading, isError, isSuccess, message, token, isActive} = useSelector(
+    (state) => state.auth)
 
-}, [error, isAuthenticated]);
+const dispatch = useDispatch();
 
-const onChange = e => setUser({...user, [e.target.name]:e.target.value});
+useEffect(()=>{
+    if(isError) {
+        toast.error(message);
+       
+        
+    }
+
+ if(isSuccess) {
+     navigate('/')
+ }
+    
+
+},[isSuccess])
+
+
+const {name, email, password, password2} = formData;
+
+
+const onChange = e => setForm({...formData, [e.target.name]:e.target.value});
 
 const onSubmit = e => {
     e.preventDefault();
@@ -60,12 +70,16 @@ const onSubmit = e => {
         passwordLentgh();
     }
     else {
-        register({
-            name,
-            email,
-            password
-            
-        })
+       const userData = {
+           name,
+           email,
+           password,
+           isAdmin:false,
+           isActive:false
+           
+       }
+
+       dispatch(register(userData))
     }
    
 

@@ -1,17 +1,19 @@
 import React, {Fragment, useContext, useEffect } from 'react'
-import VoterContext from '../../context/voter/voterContext';
+
 import { useNavigate } from 'react-router-dom';
 import { SearchContext } from '../../context/search/searchContext';
 import {AppContext} from '../../context/app/appContext';
 import AuthContext from '../../context/auth/authContext';
 import * as FaIcons from 'react-icons/fa';
 import GetLocation from '../../components/getLocation/GetLocation';
+import { connect, Connect } from 'react-redux';
+import { getVoters } from '../../actions/voterActions';
 
 
 
 
 
-const VoterList = () => {
+const VoterList = ({voter:{voters, loading}}) => {
 
     const authContext = useContext(AuthContext);
     
@@ -26,21 +28,22 @@ const VoterList = () => {
     
     const {appState, setAppState} = appContext;
 
-    const {loading} = appState;
+    
   
     const searchContext = useContext(SearchContext);
 
     const {data, setSearchState} = searchContext;
     const {searchCounty} = data;
 
-    const  voterContext = useContext(VoterContext);
+  
 
-    const { voters, getVoters } = voterContext;     
+     
 
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        
         getVoters(data);
         
             //eslint-disable-next-line
@@ -64,7 +67,7 @@ navigate("/mapVoters");
 };       
     
    
-const actionButton = (voter) => {
+const actionButton = (currentVoter) => {
 
 
   if(searchCounty == "FRESNO") {
@@ -72,8 +75,8 @@ const actionButton = (voter) => {
     setSearchState({...data,fName:"",
     lName:"",
     city:"",
-    houseNum:voter.sHouseNum,
-    street:voter.szStreetName});
+    houseNum:currentVoter.sHouseNum,
+    street:currentVoter.szStreetName});
     };
 
   if(searchCounty == "RIV") {
@@ -81,8 +84,8 @@ const actionButton = (voter) => {
   setSearchState({...data,fName:"",
   lName:"",
   city:"",
-  houseNum:voter.sHouseNum,
-  street:voter.szStreetName});
+  houseNum:currentVoter.sHouseNum,
+  street:currentVoter.szStreetName});
   };
 
   if(searchCounty == "SB") {
@@ -90,8 +93,8 @@ const actionButton = (voter) => {
     setSearchState({...data,fName:"",
     lName:"",
     city:"",
-    houseNum:voter.house_number,
-    street:voter.street});
+    houseNum:currentVoter.house_number,
+    street:currentVoter.street});
     };
 
 
@@ -110,10 +113,18 @@ let loadingMesssage = "";
 if(searchCounty == "RIV") {
 loadingMesssage = "Loading Voters for RIV County"
 
-ListTag = () => voters.map(voter => (<div className="fullRow"><div className="leftRow text-start">
-  <span className="navy">{voter.szNameLast} , {voter.szNameFirst}</span>
-<br/><span className="row2 text-start">{voter.sHouseNum} {voter.szStreetName}, {voter.sUnitAbbr} {voter.sUnitNum ? voter.sUnitNum + "," : ""}  {voter.szSitusCity} 
-</span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack" onClick={() => actionButton(voter)}/></div>
+ListTag = () => voters.map(currentVoter =>
+    (<div className="fullRow"><div className="leftRow text-start">
+    <span className="navy">
+    {currentVoter.szNameLast} ,
+    {currentVoter.szNameFirst}</span><br/><span className="row2 text-start">
+    {currentVoter.sHouseNum}
+    {currentVoter.szStreetName},
+    {currentVoter.sUnitAbbr}
+    {currentVoter.sUnitNum ? currentVoter.sUnitNum + "," : ""}
+    {currentVoter.szSitusCity} 
+    </span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack"
+    onClick={() => actionButton(currentVoter)}/></div>
 </div>
 ))
 }
@@ -121,10 +132,18 @@ ListTag = () => voters.map(voter => (<div className="fullRow"><div className="le
 if(searchCounty == "FRESNO") {
   loadingMesssage = "Loading Voters for FRESNO County"
   
-  ListTag = () => voters.map(voter => (<div className="fullRow"><div className="leftRow text-start">
-    <span className="navy">{voter.szNameLast} , {voter.szNameFirst}</span>
-  <br/><span className="row2 text-start">{voter.sHouseNum} {voter.szStreetName}, {voter.sUnitAbbr} {voter.sUnitNum ? voter.sUnitNum + "," : ""}  {voter.szSitusCity} 
-  </span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack" onClick={() => actionButton(voter)}/></div>
+  ListTag = () => voters.map(currentVoter => (<div className="fullRow">
+      <div className="leftRow text-start">
+      <span className="navy">
+      {currentVoter.szNameLast} ,
+      {currentVoter.szNameFirst}</span> <br/><span className="row2 text-start">
+      {currentVoter.sHouseNum}
+      {currentVoter.szStreetName},
+      {currentVoter.sUnitAbbr}
+      {currentVoter.sUnitNum ? currentVoter.sUnitNum + "," : ""}
+      {currentVoter.szSitusCity} 
+      </span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack"
+      onClick={() => actionButton(currentVoter)}/></div>
   </div>
   ))
   }
@@ -132,11 +151,19 @@ if(searchCounty == "FRESNO") {
 if(searchCounty == "SB") {
   loadingMesssage = "Loading Voters for SB County"
 
- ListTag = () => voters.map(voter => (<div className="fullRow"><div className="leftRow text-start">
-  <span className="navy">{voter.name_last} , {voter.name_first}</span>
-<br/><span className="row2 text-start">{voter.house_number}  {voter.street}, {voter.apartment_number ? voter.apartment_number + ", " : ""} {voter.city}
-{user.seeParty ? <span className="party"> - {voter.party}</span> : ""}   
-</span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack" onClick={() => actionButton(voter)}/></div>
+ ListTag = () => voters.map(currentVoter => (<div className="fullRow">
+    <div className="leftRow text-start"> 
+    <span className="navy">
+    {currentVoter.name_last} ,
+    {currentVoter.name_first}</span><br/><span className="row2 text-start">
+    {currentVoter.house_number}
+    {currentVoter.street},
+    {currentVoter.apartment_number ? currentVoter.apartment_number + ", " : ""}
+    {currentVoter.city}
+    {user.seeParty ? <span className="party"> - 
+    {currentVoter.party}</span> : ""}   
+    </span></div><div className="rightRow"><FaIcons.FaHouseUser className="iconLgBlack"
+    onClick={() => actionButton(currentVoter)}/></div>
 </div>
 ))
   }
@@ -193,4 +220,8 @@ else {
 
 }
 
-export default VoterList
+const mapStateToProps = state =>  ({
+  voter: state.voter
+});
+
+export default connect(mapStateToProps, {getVoters}) (VoterList);

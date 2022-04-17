@@ -1,73 +1,78 @@
-import React, {useState, useContext, useEffect} from 'react';
-import AuthContext from '../../context/auth/authContext';
+import React, {useState, useEffect} from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import {useSelector, useDispatch} from 'react-redux';
+import {login, reset, loadUser} from '../../features/auth/authSlice';
 
 
 const Login = () => {
+
+const {user, isLoading, isError, isSuccess, isActive,message, token} = useSelector(
+    (state) => state.auth)
+
+const dispatch = useDispatch();
 
 
 // Navigate after login  
 const navigate = useNavigate();
 
-// Get Auth context
-const authContext = useContext(AuthContext);
+
 
 // Toast error finctions
-const invalidCredentials = () => toast.error("Invalid Credentials!", {position: "top-center"});
-const userNotFound = () => toast.error("User Not Found!", {position: "top-center"});
+
 const emptyFields = () => toast.error("Please complete all fields!", {position: "top-center"});
 
-// Deconstruct Auth context
-const {login, error, clearErrors, isAuthenticated} = authContext;
+useEffect(()=>{
+  if(isError) {
+      toast.error(message);
+      dispatch(reset())
+           
+  }
+
+ if(isSuccess){
+    dispatch(loadUser())
+    navigate('/')
+
+   
+ }
+
+ 
+
+
+
+},[isSuccess])
+
+
 
 // Create state for form
-const [user, setUser] = useState({
+const [formData, setForm] = useState({
     email: "",
     password: ""
 
 
 });
 
-// Hook for errors and authentication
-useEffect(() => {
 
-  // Go to main page if authenticated
-  if (isAuthenticated) {
-      navigate("/");
-  }
-  
-  if (error ==="Invalid Credentials") {
-  invalidCredentials();
-  }
+const {email, password} = formData;
 
-  if (error ==="User not found") {
-    userNotFound();
-    }
-    
-   
-  clearErrors();
-  
-  }, [error, isAuthenticated]);
-  
-
-
-const {email, password} = user;
-
-const onChange = e => setUser({...user, [e.target.name]:e.target.value});
+const onChange = e => setForm({...formData, [e.target.name]:e.target.value});
 
 const onSubmit = e => {
     e.preventDefault();
   
     if (email==='' || password===''){
-        emptyFields();
+        toast.error("Please fill all fields")
               
     }else {
-      login({
+      const userData = {
         email,
         password
-      })
+      }
+
+      dispatch(login(userData));
+   
+     
     }
 
 }

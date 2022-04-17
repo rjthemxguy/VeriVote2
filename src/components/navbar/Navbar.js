@@ -1,6 +1,7 @@
 import React, {Fragment, useState, useContext} from 'react'
 import { Link } from 'react-router-dom';
-import AuthContext from '../../context/auth/authContext';
+import { useSelector, useDispatch } from 'react-redux';
+import {logout, reset} from '../../features/auth/authSlice';
 
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
@@ -12,9 +13,12 @@ import * as BiIcons from 'react-icons/bi';
 
 const Navbar = () => {
 
-const authContext = useContext(AuthContext);
 
-const {isAuthenticated, logout, user} = authContext;
+
+
+
+const dispatch = useDispatch();
+const {token, isAdmin} = useSelector((state) => state.auth)
 
 
 
@@ -28,7 +32,9 @@ const showSidebar = () =>
 const onLogout = () => {
 
     showSidebar();
-    logout();
+    dispatch(logout());
+    dispatch(reset());
+
 
 }
 
@@ -49,9 +55,14 @@ const authLinks = (
         <li onClick={showSidebar}><BsIcons.BsPeopleFill className="iconItem"/>
         <Link style={{textDecoration:'none'}} className="text-light" to='/countyList'>Select County</Link></li>
 
+
         
+        {isAdmin ?
         <li onClick={showSidebar}><BsIcons.BsFillCheckCircleFill className="iconItem"/>
             <Link style={{textDecoration:'none'}} className="text-light" to='/listUsers'>Approve Users</Link></li>
+        : ""}
+
+
         <li onClick={onLogout}><BiIcons.BiLogOutCircle className="iconItem"/>Logout</li>
 
 </Fragment>
@@ -83,7 +94,7 @@ const authLinks = (
             <div className={sidebar ? "sidebar" : "no-sidebar"}> 
             <div className="closeDiv"><FaIcons.FaWindowClose className="iconItem" onClick={showSidebar}/></div>
                 <ul className="mt-4 sideBarItems">
-                {isAuthenticated ? authLinks : guestLinks}    
+                {token ? authLinks : guestLinks}    
                 </ul>
             </div>
            

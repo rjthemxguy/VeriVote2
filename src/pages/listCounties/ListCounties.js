@@ -1,56 +1,45 @@
-import React, {Fragment, useContext, useEffect, useState } from 'react'
+import React, {Fragment, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import AppState, {AppContext} from '../../context/app/appContext';
-import AuthContext from '../../context/auth/authContext';
-import UserContext from '../../context/user/userContext';
-import UserDetail from '../userDetail/UserDetail';
-import { SearchContext } from '../../context/search/searchContext';
-
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import { loadUser, setCounty } from '../../features/auth/authSlice';
 
 const CountyList = () => {
 
 
-  const searchContext = useContext(SearchContext);
-  const {data, setSearchState} = searchContext;
-  const {searchCounty} = data;
-  
+  const dispatch = useDispatch();
+  const {searchCounty, isLoading, user} = useSelector((state) => state.auth)
 
-    const userContext = useContext(UserContext);
-    const authContext = useContext(AuthContext);
-    const appContext = useContext(AppContext);
-
-    const { users, getUsers, updateUser} = userContext; 
-    const {isAuthenticated, user} = authContext;
-    const {appState, setAppState} = appContext;
-
-    const {currentUser} = appState;
-
-    const [countyState, setCounty] = useState({county:searchCounty});
-    const{county} = countyState;
-  
+    const [countyState, setCountyState] = useState({county:searchCounty});
+    const {county} = countyState;
 
     const userNavigate = useNavigate();
     
-    useEffect(() => {
-     
-     authContext.loadUser();
-     
-     
-    });
-
-
-
+    
     const onValueChange = e => {
       
-      setCounty({...countyState, [e.target.name]:e.target.value});
+      setCountyState({...countyState, [e.target.name]:e.target.value});
     }
 
 
+    useEffect(()=>{
+
+      dispatch(loadUser());
+  
+    },[])
+
+    useEffect(()=>{
+      if(!isLoading && !user.isActive) {
+        
+             userNavigate('/notActive')
+        
+ }
+
+},[isLoading])
+
+
     const submitCounty = () => {
-     // updateUser({...user,county:county});
-    setSearchState({...data, searchCounty:county});
+     
+      dispatch(setCounty(county));
       userNavigate("/");
     }
 

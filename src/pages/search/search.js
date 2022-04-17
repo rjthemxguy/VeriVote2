@@ -1,10 +1,10 @@
-import React, {Fragment, useContext, useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import { useNavigate} from "react-router-dom";
-import { SearchContext } from '../../context/search/searchContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AuthContext from '../../context/auth/authContext';
-import { AppContext, AppState } from '../../context/app/appContext';
+import { useSelector, useDispatch } from 'react-redux';
+import {getVoters} from '../../features/voter/voterSlice';
+import {setCounty, loadUser} from '../../features/auth/authSlice';
 
 
 
@@ -14,35 +14,45 @@ import { AppContext, AppState } from '../../context/app/appContext';
 function Search() {
 
     let navigate = useNavigate();
-
-    const appContext = useContext(AppContext);
-    const authContext = useContext(AuthContext);
-    const {appState, setAppState} = appContext;
-    const {currentUser} = appState;
    
-    const {user,loading, error, state} = authContext;
-
+    const dispatch = useDispatch();
+    const {user, isLoading} = useSelector((state) => state.auth)
     
-    
 
-    useEffect(() => {
-      authContext.loadUser();
-      
-          
+    const [searchData, setSearch] = useState({
+      fName: "",
+      lName: "",
+      houseNum: "",
+      street: "",
+      city: ""
+  
+  });
+
+  useEffect(()=>{
+
+    dispatch(loadUser());
+
+  },[])
+  
+
+    useEffect(()=>{
+         if(!isLoading && !user.isActive) {
+           
+                navigate('/notActive')
+           
+    }
+
      
+    },[isLoading])
 
-    },[authContext.isAuthenticated]);
-
-   
+    
    
 
     const notify = () => toast.error("Please enter some data!", {position: "top-center"});
 
-    const searchContext = useContext(SearchContext);
-
-    const {data, setSearchState} = searchContext;
-     
-    const {fName, lName, houseNum, street, city, searchCounty} = data;
+  
+        
+    const {fName, lName, houseNum, street, city} = searchData;
 
     
   
@@ -73,28 +83,31 @@ function Search() {
     return isBlank;
    }
 
-    const onChange = e => setSearchState({...data, county:searchCounty, [e.target.name]: e.target.value});
+    const onChange = e => setSearch({...searchData, [e.target.name]: e.target.value});
 
     const onSubmit = (e) =>{
         e.preventDefault();
 
-    if(user.isActive) {
+    
          
       if(checkForm(e) === true) {
         notify();
        }
-       else {
-       navigate("/results");
-       }
 
-      }else {
-      navigate("/notActive");
-      }
+       dispatch(setCounty("FRESNO"))
 
+      // else {
+      // navigate("/results");
+      // }
+
+      //}else {
+      //navigate("/notActive");
+      //}
+      
         
-        
 
-    }
+    
+  }
    
   return (
     <Fragment>
@@ -102,39 +115,39 @@ function Search() {
         
      <div className="form-group container pt-4 topMargin" >
 
-    Search County: {searchCounty}
+   
 
         <form onSubmit={onSubmit}>
             <input type="text"
-            class="form-control mt-4"
+            className="form-control mt-4"
             placeholder="Last Name"
             name="lName"
             value={lName}
             onChange = {onChange}/>
 
             <input type="text"
-            class="form-control mt-4"
+            className="form-control mt-4"
             placeholder="House Number"
             name="houseNum"
             value={houseNum}
             onChange = {onChange}/>
 
             <input type="text"
-            class="form-control mt-4"
+            className="form-control mt-4"
             placeholder="First Name"
             name="fName"
             value={fName}
             onChange = {onChange}/>
 
             <input type="text"
-            class="form-control mt-4"
+            className="form-control mt-4"
             placeholder="Street"
             name="street"
             value={street}
             onChange = {onChange}/>
 
             <input type="text"
-            class="form-control mt-4"
+            className="form-control mt-4"
             placeholder="City"
             name="city"
             value={city}
